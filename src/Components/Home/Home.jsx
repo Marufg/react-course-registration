@@ -4,10 +4,14 @@ import { useEffect } from "react";
 import Cart from "../Cart/Cart";
 import "./Home.css"
 import { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
     const [courseTitle, setCourseTitle] = useState([])
     const [selectedTitle, setSelectedTitle] = useState([])
+    const [remaining, setRemaining] = useState([0])
+    const [totalCost, setTotalCost] =useState([])
     useEffect(() =>{
         fetch("./Data.json")
         .then((res) => res.json())
@@ -17,10 +21,24 @@ const Home = () => {
 
     const handleTitle =(title) =>{
         const isExist = selectedTitle.find((name) => name.title == title.title);
+        let count = title.credit;
+
+
         if (isExist) {
-           return alert('already complete')
+            toast("Sorry Don't Come More Than 1 Time")
         }else{
+            selectedTitle.forEach((name) => {
+                count = count + name.credit;
+            });
+            const totalRemainingCredit = 20 - count;
+            if (count > 20) {
+                toast ('Oh No.. Sorry All Ready 20 Complete')
+            }
+          else{
+            setTotalCost(count)
+            setRemaining(totalRemainingCredit);
         setSelectedTitle([...selectedTitle, title])
+          }
 
         }
 
@@ -51,12 +69,14 @@ const Home = () => {
                     </div>
                         <button onClick={() =>handleTitle(title)} className="select-btn">Select</button>
 
+
                 </div>
                     ))
                 }
                 </div>
                 <div className="cart">
-                    <Cart selectedTitle={selectedTitle}></Cart>
+                    <Cart selectedTitle={selectedTitle} remaining={remaining} totalCost={totalCost}></Cart>
+                <ToastContainer />
                 </div>
             </div>
             
