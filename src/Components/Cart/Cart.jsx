@@ -10,9 +10,11 @@ const Cart = ({ selectedTitle, remaining, totalCost, }) => {
             <hr />
             <h3>Course Name</h3>
             <hr />
-            {selectedTitle.map((title) => (
+           <ol>
+           {selectedTitle.map((title) => (
                 <li>{title.title}</li>
             ))}
+           </ol>
             <h5>Total Credit Hour : {totalCost} </h5>
             <hr />
             <h6>Total Price : 48000 USD</h6>
